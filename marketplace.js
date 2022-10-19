@@ -1,8 +1,6 @@
 var Sqrl = require('squirrelly');
 var path = require('path');
 const fs = require('fs')
-const { app, dialog, getCurrentWindow } = require('@electron/remote');
-var ipcRenderer = require('electron').ipcRenderer;
 
 const blankDialogs = {
     "menu": [
