@@ -118,7 +118,7 @@ class marketplace {
                         {{/each}}
                     </div>
                     <div class="tab-pane fade" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                        <ul class="nav nav-pils nav-black" style="width:100%" id="{{modal.id}}_action_type" bs-type="tab" role="tablist">
+                        <!-- <ul class="nav nav-pils nav-black" style="width:100%" id="{{modal.id}}_action_type" bs-type="tab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link btn-secondary btn-top-menu active" 
                                 id="{{modal.id}}_action_type_upload_tab" 
@@ -135,7 +135,7 @@ class marketplace {
                                 el-group="{{modal.id}}_action_type_git" el-index="1" 
                                 aria-selected="true">Git package (Beta)</a>
                             </li>
-                        </ul>
+                        </ul> -->
                         <div class="tab-content tab-content-black" id="{{modal.id}}_action_type_content">
                             <div class="tab-pane fade show active p-3" 
                                 id="{{modal.id}}_action_type_upload" role="tabpanel" 
@@ -147,25 +147,47 @@ class marketplace {
                                     </div>
                                 </div>
                                 <div class="hidden" id="{{modal.id}}AddDialog">
-                                    <label for="formFile" class="form-label">Choose a dialog file to add</label>
-                                    <div class="d-flex mr-3 justify-content-between">
-                                        <div>
+                                    <h5>Add your dialog</h5>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="d-flex mr-3 justify-content-between">
+                                                <label class="form-label mt-3 mr-2 small">Dialogs Location:</label>
+                                                <button type="button" class="btn btn-upload btn-path" id="{{modal.id}}DialogLocation" onclick="openDialogsFolder()"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row  mt-1">
+                                        <div class="col-6">
                                             <select class="form-select mt-1 mr-1" id="addDialogsChapter" aria-label="Default select example">
                                                 {{each(options.dropitems)}}
                                                     <option value="{{@this | safe}}">{{@this | safe}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
-                                        <div>
-                                            <input type="file" id="formFile" accept=".js">
-                                        </div>
-                                        <div>
-                                            <button type="button" class="btn btn-upload" action="save" id="{{modal.id}}Save">Upload</button>  
+                                        <div class="col-6">
+                                            <span>Chapter dialogs will be added to </span>
                                         </div>
                                     </div>
-                                    <div class="d-flex mr-3 justify-content-between">
-                                        <label class="form-label mt-3 mr-2 small">Dialogs Location:</label>
-                                        <button type="button" class="btn btn-upload btn-path" id="{{modal.id}}DialogLocation" onclick="openDialogsFolder()"></button>
+                                    <div class="row mt-1">
+                                        <div class="col-6">
+                                            <input type="file" id="formFile" accept=".js">      
+                                        </div>
+                                        <div class="col-6">
+                                            <span>Dialogs JS file</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="col-6">
+                                            <input type="file" id="iconFile" accept=".svg">
+                                        </div>
+                                        <div class="col-6">
+                                            <span>(Optional) Dialogs icon file (.svg only) </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="col">
+                                            <button type="button" class="btn btn-upload" action="save" id="{{modal.id}}Save">Upload</button>  
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -531,7 +553,7 @@ You can create new dialogs and add them to marketplace by following the steps be
         if (!mMenu.getUserDialogsPath(main) && $(`#${this.id}GitUrl`).val()=="") {
             var folder = dialog.showOpenDialogSync(getCurrentWindow(), {
                     title: 'Select path for market dialogs',
-                    defaultPath: app.getPath('home'),
+                    defaultPath: sessionStore.get("HomeDir"),
                     properties: ['openDirectory', 'createDirectory', 'treatPackageAsDirectory', 'dontAddToRecent'],
                 }
             )
@@ -558,7 +580,7 @@ You can create new dialogs and add them to marketplace by following the steps be
             }
             var folder = dialog.showOpenDialogSync(getCurrentWindow(), {
                 title: 'Select path for git dialogs',
-                defaultPath: app.getPath('home'),
+                defaultPath: sessionStore.get("HomeDir"),
                 properties: ['openDirectory', 'createDirectory', 'treatPackageAsDirectory', 'dontAddToRecent'],
             })
             // var dialogsPath = $(`#${this.id}GitUrl`).val().split("/").last().replace(".git", "")
