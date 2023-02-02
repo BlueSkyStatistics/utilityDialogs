@@ -310,11 +310,12 @@ modulesСardTemplate = `<div class="card" bs-tab="modules">
             </div>
         </div>
         <div class="col-4">
-            <!-- <select class="form-select form-select-sm versionsSelect" aria-label=".form-select-sm">
+            <select class="form-select form-select-sm versionsSelect" aria-label=".form-select-sm">
                  {{each(options.module.available)}}
                      <option value="{{@this.name}}">{{@this.name}}</option>
                  {{/each}}
-            </select> -->
+            </select>
+            <button type="button" class="btn btn-sm btn-outline-primary float-right" data-module='{{module.name | safe}}' data-module-type='{{module.type | safe}}' data-version='{{module.version | safe}}' onclick="updateModule(event)">Update</button>
         </div>
     </div>
 </div>
