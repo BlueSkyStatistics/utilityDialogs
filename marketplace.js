@@ -315,7 +315,14 @@ modulesСardTemplate = `<div class="card" bs-tab="modules">
                      <option value="{{@this.name}}">{{@this.name}}</option>
                  {{/each}}
             </select>
-            <button type="button" class="btn btn-sm btn-outline-primary float-right" data-module='{{module.name | safe}}' data-module-type='{{module.type | safe}}' data-version='{{module.version | safe}}' onclick="updateModule(event)">Update</button>
+            <button type="button" class="btn btn-sm btn-outline-primary float-right" 
+                data-module='{{module.name | safe}}' 
+                data-module-type='{{module.type | safe}}' 
+                data-version='{{module.version | safe}}' 
+                onclick="PM.handleMarketUpdateClick(this)"
+            >
+                Update
+            </button>
         </div>
     </div>
 </div>
