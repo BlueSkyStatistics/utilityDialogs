@@ -67,6 +67,11 @@ const blankDialogs = {
     ]
 }
 
+window.handleMarketUpdateClick = async el => {
+    const {moduleType, module: moduleName, version: currentVersion} = el.dataset
+    const selectedVersion = $(el).siblings('select.versionsSelect').val()
+    await global.PackageManager?.handleMarketUpdateClick(moduleName, moduleType, currentVersion, selectedVersion)
+}
 
 class marketplace {
     htmlTemplate = `<div class="modal left fade" id="{{modal.id}}" tabindex="-1" role="dialog" 
@@ -319,7 +324,7 @@ modulesСardTemplate = `<div class="card" bs-tab="modules">
                 data-module='{{module.name | safe}}' 
                 data-module-type='{{module.type | safe}}' 
                 data-version='{{module.version | safe}}' 
-                onclick="PM.handleMarketUpdateClick(this)"
+                onclick="handleMarketUpdateClick(this)"
             >
                 Update
             </button>
