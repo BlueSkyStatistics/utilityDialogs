@@ -295,7 +295,7 @@ class marketplace {
     </div>
 </div> `
 
-modulesСardTemplate = `<div class="card" bs-tab="modules">
+modulesCardTemplate = `<div class="card" bs-tab="modules">
 <div class="card-header">
     <div class="row">
         <div class="col-8 title">
@@ -315,7 +315,11 @@ modulesСardTemplate = `<div class="card" bs-tab="modules">
                      <option value="{{@this.name}}">{{@this.name}}</option>
                  {{/each}}
             </select>
-            <button type="button" class="btn btn-sm btn-outline-primary float-right" data-module='{{module.name | safe}}' data-module-type='{{module.type | safe}}' data-version='{{module.version | safe}}' onclick="updateModule(event)">Update</button>
+            <button type="button" class="btn btn-sm btn-outline-primary float-right" data-module='{{module.name | safe}}' data-module-type='{{module.type | safe}}' data-version='{{module.version | safe}}' 
+                onclick="PM.handleMarketUpdateClick(this)"
+            >
+                Update
+            </button>
         </div>
     </div>
 </div>
@@ -511,9 +515,15 @@ You can create new dialogs and add them to marketplace by following the steps be
         var installedModules = sessionStore.get("modulesVersions", [])
         for (var i=0; i<installedModules.length; i++) {
             installedModules[i].available = installedModules[i].available.map(a => Object.values(a)[0]);
-            modules.push(Sqrl.Render(outerthis.modulesСardTemplate, {module: installedModules[i]}))
+            modules.push(Sqrl.Render(outerthis.modulesCardTemplate, {module: installedModules[i]}))
         }
-        return Sqrl.Render(this.htmlTemplate, {modal: {id: outerthis.id, label: outerthis.label}, chapters: outerthis.chapters, tabs: outerthis.tabs, dropitems: outerthis.dropitems, modules: modules})
+        return Sqrl.Render(this.htmlTemplate, {
+            modal: {id: outerthis.id, label: outerthis.label},
+            chapters: outerthis.chapters,
+            tabs: outerthis.tabs,
+            dropitems: outerthis.dropitems,
+            modules: modules
+        })
     }
     onShow() {
         var outerthis = this
