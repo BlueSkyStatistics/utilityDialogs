@@ -300,22 +300,25 @@ modulesCardTemplate = `<div class="card" bs-tab="modules">
     <div class="row">
         <div class="col-8 title">
             <div calas="d-flex">
-                <div class="d-inline-flex"><h6>{{module.name | safe}}</h6></div>
+                <div class="d-inline-flex"><h6>{{ name | safe }}</h6></div>
                 <div class="d-inline-flex ml-2">
-                    <div class="bg-success rounded-pill pl-3 pr-3" style="height: 20px;">{{ module.version | safe }}</div>
+                    <div class="bg-success rounded-pill pl-3 pr-3" style="height: 20px;">{{ version | safe }}</div>
                 </div>
                 <div class="d-inline-flex ml-2">
-                    <div class="bg-primary rounded-pill pl-3 pr-3" style="height: 20px;">{{ module.type | safe }}</div>
+                    <div class="bg-primary rounded-pill pl-3 pr-3" style="height: 20px;">{{ group | safe }}</div>
                 </div>
             </div>
         </div>
         <div class="col-4">
             <select class="form-select form-select-sm versionsSelect" aria-label=".form-select-sm">
-                 {{each(options.module.available)}}
-                     <option value="{{@this.name}}">{{@this.name}}</option>
+                 {{each(options.availableVersions)}}
+                     <option value="{{@this}}">{{@this}}</option>
                  {{/each}}
             </select>
-            <button type="button" class="btn btn-sm btn-outline-primary float-right" data-module='{{module.name | safe}}' data-module-type='{{module.type | safe}}' data-version='{{module.version | safe}}' 
+            <button type="button" class="btn btn-sm btn-outline-primary float-right" 
+                data-name='{{name | safe}}' 
+                data-group='{{group | safe}}' 
+                data-version='{{version | safe}}' 
                 onclick="PM.handleMarketUpdateClick(this)"
             >
                 Update
@@ -324,7 +327,7 @@ modulesCardTemplate = `<div class="card" bs-tab="modules">
     </div>
 </div>
 <div class="card-body">
-{{ module.description | safe }}
+{{ description | safe }}
 </div>
 </div>`
 
@@ -511,12 +514,28 @@ You can create new dialogs and add them to marketplace by following the steps be
                 cards = []
             }
         })
-        var modules = []
-        var installedModules = sessionStore.get("modulesVersions", [])
-        for (var i=0; i<installedModules.length; i++) {
-            installedModules[i].available = installedModules[i].available.map(a => Object.values(a)[0]);
-            modules.push(Sqrl.Render(outerthis.modulesCardTemplate, {module: installedModules[i]}))
-        }
+
+
+        // var modules = []
+        // var installedModules = sessionStore.get("modulesVersions", [])
+        const installedModules = Object.values(
+            sessionStore.get("modulesContent", {})
+        ).map(i => new global.LocalPackage(i, PM.availableModules[i.name]))
+        const modules = installedModules.map(i => {
+            return Sqrl.Render(outerthis.modulesCardTemplate, {
+                name: i.name,
+                version: i.version,
+                group: i.group,
+                description: i.meta?.description || '',
+                availableVersions: Object.keys(i.availableVersions)
+            })
+        })
+        // for (var i=0; i<installedModules.length; i++) {
+        //     installedModules[i].available = installedModules[i].available.map(a => Object.values(a)[0]);
+        //     modules.push(Sqrl.Render(outerthis.modulesCardTemplate, {module: installedModules[i]}))
+        // }
+
+
         return Sqrl.Render(this.htmlTemplate, {
             modal: {id: outerthis.id, label: outerthis.label},
             chapters: outerthis.chapters,
